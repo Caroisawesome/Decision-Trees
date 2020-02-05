@@ -3,7 +3,9 @@
 ### Some functions:
 
 Gini_index 
+
 Entropy
+
 Missclassification_error
 
 Impure - calls gini-index or entropy or missclassification-error
