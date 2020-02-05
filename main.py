@@ -1,6 +1,17 @@
 import Tree
 import Impurity
 
+
+def main():
+	d = []#  read data from csv
+
+	t = dtConstruct(d)
+
+	## Then pickle tree
+	## dump pickled tree into file 
+
+
+
 def dtConstruct(d):
     t = Tree()
 
