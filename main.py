@@ -5,22 +5,22 @@ import Impurity
 def main():
 	d = []#  read data from csv
 
-	t = dtConstruct(d)
+	t = dt_construct(d)
 
 	## Then pickle tree
 	## dump pickled tree into file 
 
 
 
-def dtConstruct(d):
+def dt_construct(d):
     t = Tree()
 
-    t.data = representativeClass(d) 
+    t.data = representative_class(d) 
     if impure(d):
-        criterion = splitCriterion(d)
+        criterion = split_criterion(d)
     else: 
         return t
     D = decompose(d, criterion)
-    for dVal in D:
-        addSuccessor(t, dtConstruct(dVal))
+    for d_val in D:
+        add_successor(t, dt_construct(d_val))
     return t
