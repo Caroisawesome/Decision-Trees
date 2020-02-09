@@ -1,6 +1,6 @@
 import Tree
 import Impurity
-
+import pickle
 
 def main():
 	d = []#  read data from csv
@@ -9,7 +9,9 @@ def main():
 
 	## Then pickle tree
 	## dump pickled tree into file 
-
+	file = open('decision_tree',  'wb')
+	pickle.dump(t, file)
+	file.close()
 
 
 def dt_construct(d):
