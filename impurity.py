@@ -3,13 +3,13 @@ import math
 # type: integer. 0 to calculate missclassificationError, 1 to calculate entropy, 2 to calculate giniIndex
 def impurity(type, data):
     if (type == 0):
-        missclassificationError(data)
+        missclassification_error(data)
     elif (type == 1):
         entropy(data)
     else:
-        giniIndex(data)
+        gini_index(data)
 
-def missclassificationError(data):
+def missclassification_error(data):
         return 0
 
 
@@ -21,7 +21,7 @@ def entropy(data):
     return ent
 
 # data: array of probabilities ?
-def giniIndex(data):
+def gini_index(data):
 
     sum = 0;
     for p in data:
