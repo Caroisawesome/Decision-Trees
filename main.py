@@ -1,4 +1,4 @@
-import Tree
+import tree
 import impurity
 import pickle
 import data
