@@ -1,6 +1,23 @@
 import math
+import numpy as np
 
-# type: integer. 0 to calculate missclassificationError, 1 to calculate entropy, 2 to calculate giniIndex
+def information_gain(data):
+
+    total = 0
+    total_nucleotide = (0, 0 ,0,0) # total A, Total T, total G, total C
+    prob_nucl_outcomes = np.zeros(12)
+
+    for i in range(0,4):
+        index = i*3
+        total_nucleotide[i] = data[index] + data[index+1] + data[index+2]
+        total += total_nucleotide[i]
+        prob_nucl_outcomes[index] = data[index]/total_nucleotide[i]
+        prob_nucl_outcomes[index+1] = data[index+1]/total_nucleotide[i]
+        prob_nucl_outcomes[index+2] = data[index+2]/total_nucleotide[i]
+
+    
+
+# type: 3integer. 0 to calculate missclassificationError, 1 to calculate entropy, 2 to calculate giniIndex
 def impurity(type, data):
     if (type == 0):
         missclassification_error(data)

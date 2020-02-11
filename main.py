@@ -30,3 +30,24 @@ def dt_construct(d,t):
     for d_val in D:
         add_successor(t, dt_construct(d_val,t))
     return t
+
+def get_position_with_greatest_information_gain(counts):
+
+    # Constant, decides when to stop splitting
+    split_criterion = 0.05
+
+    Ig_old = 0
+    position = -1
+    for i in range(0,60):
+        Ig_new = information_gain(counts[i])
+
+        if Ig_new > Ig_old:
+            Ig_old = Ig_new
+            position = i
+
+    if (Ig_old < split_criterion):
+        ## do not split anymore! Not worth it
+        return -1
+    else:
+        return position
+
