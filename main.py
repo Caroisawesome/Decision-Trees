@@ -3,24 +3,10 @@ import impurity
 import pickle
 import data
 
-def main():
-
-    # reads data from csv, and creates a 60 array of length 12 tuples 
-    d = data.gen_dat()#  read data from csv
-    for row in d:
-
-        print(row)
-
-    t = Tree()
-    t = dt_construct(d,t)
-
-    file = open('decision_tree',  'wb')
-    pickle.dump(t, file)
-    file.close()
 
 
 def dt_construct(d,t):
-
+    return 0
         # find Root node
         # calculate if it is worth splitting on that node
         # if yes, then split on that node ( remove that column from the data),
@@ -57,3 +43,16 @@ def get_position_with_greatest_information_gain(counts):
     else:
         return position
 
+
+if (__name__ == '__main__'):
+#def __main__():
+
+    # reads data from csv, and creates a 60 array of length 12 tuples 
+    d = data.gen_dat()#  read data from csv
+    print(d)
+    t = Tree()
+    t = dt_construct(d,t)
+
+    file = open('decision_tree',  'wb')
+    pickle.dump(t, file)
+    file.close()
