@@ -6,24 +6,15 @@ import data
 
 
 def dt_construct(d,t):
-    return 0
-        # find Root node
+
+    # find Root node
+    position_to_split = get_root_node(d)
+    
         # calculate if it is worth splitting on that node
         # if yes, then split on that node ( remove that column from the data),
         #         call d_t contstruct on the remaining data
-    #split_on_position = get_position_with_greatest_information_gain(d)
 
-    # t.data = representative_class(d) 
-    # if impure(d):
-    #     criterion = split_criterion(d)
-    # else: 
-    #     return t
-    # D = decompose(d, criterion)
-    # for d_val in D:
-    #     add_successor(t, dt_construct(d_val,t))
-    # return ti
-
-def get_position_with_greatest_information_gain(counts):
+def get_root_node(counts):
 
     # Constant, decides when to stop splitting
     split_criterion = 0.05
@@ -48,7 +39,7 @@ if (__name__ == '__main__'):
 #def __main__():
 
     # reads data from csv, and creates a 60 array of length 12 tuples 
-    d = data.gen_dat()#  read data from csv
+    d = data.gien_dat()#  read data from csv
     print(d)
     t = Tree()
     t = dt_construct(d,t)
