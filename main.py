@@ -1,11 +1,16 @@
 import Tree
 import impurity
 import pickle
+import data
 
 def main():
 
-        # d is an array of tuples containing an id, DNA values, and the final classification
-    d = [()]#  read data from csv
+    # reads data from csv, and creates a 60 array of length 12 tuples 
+    d = data.gen_dat()#  read data from csv
+    for row in d:
+
+        print(row)
+
     t = Tree()
     t = dt_construct(d,t)
 
@@ -20,16 +25,17 @@ def dt_construct(d,t):
         # calculate if it is worth splitting on that node
         # if yes, then split on that node ( remove that column from the data),
         #         call d_t contstruct on the remaining data
+    #split_on_position = get_position_with_greatest_information_gain(d)
 
-    t.data = representative_class(d) 
-    if impure(d):
-        criterion = split_criterion(d)
-    else: 
-        return t
-    D = decompose(d, criterion)
-    for d_val in D:
-        add_successor(t, dt_construct(d_val,t))
-    return t
+    # t.data = representative_class(d) 
+    # if impure(d):
+    #     criterion = split_criterion(d)
+    # else: 
+    #     return t
+    # D = decompose(d, criterion)
+    # for d_val in D:
+    #     add_successor(t, dt_construct(d_val,t))
+    # return ti
 
 def get_position_with_greatest_information_gain(counts):
 
