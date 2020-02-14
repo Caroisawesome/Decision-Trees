@@ -8,7 +8,7 @@ import pickle
 import data
 
 
-def dt_construct(d,t):
+def dt_construct(d, blacklist, t):
 
     # calculate if it is worth splitting on that node
     # if yes, then split on that node ( remove that column from the data)
@@ -16,7 +16,16 @@ def dt_construct(d,t):
 
     # find Root node
     position_to_split = get_root_node(d)
+    if position_to_split >= 0:
+        blacklist.append(position_to_split)
     print("Position to split", position_to_split)
+
+def split_data(data, index):
+    d     = data[index]
+    a_dat = []
+    t_dat = []
+    g_dat = []
+    c_dat = []
 
 def chi_square(data, index):
     #stat, p, dof, expected = chi2_contigency(data)
@@ -86,7 +95,7 @@ if (__name__ == '__main__'):
     # reads data from csv, and creates a 60 array of length 12 tuples 
     d = data.gen_dat()#  read data from csv
     t = tree.Tree()
-    t = dt_construct(d,t)
+    t = dt_construct(d, [], t)
 
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)
