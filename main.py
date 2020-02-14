@@ -16,30 +16,45 @@ def dt_construct(d,t):
 
     # find Root node
     position_to_split = get_root_node(d)
-    print("Posistion to split", position_to_split)
+    print("Position to split", position_to_split)
 
 def chi_square(data, index):
     #stat, p, dof, expected = chi2_contigency(data)
+    classes  = 3
+    values   = 4
+    prob     = 0.95
     total    = 0
     d        = data[index]
     expected = []
-    real     = []
+    # totals[0] = n, totals[1] = ie, totals[2] = ei
+    totals   =  [d[0] + d[3] + d[6] + d[ 9], d[1] + d[4] + d[7] + d[10], d[2] + d[5] + d[8] + d[11]]
     a_tot    = d[0] + d[ 1] + d[ 2]
     t_tot    = d[3] + d[ 4] + d[ 5]
     g_tot    = d[6] + d[ 7] + d[ 8]
     c_tot    = d[9] + d[10] + d[11]
+    val      = 0
 
     for i in range(0, len(data[index])):
-       total += d[i] 
+        total += d[i] 
     
-    #for x in data[index]:
-    #    expected.append((x / total))
+    for j in range(0, len(d)):
+        if j < 3:
+            expected.append(a_tot * (totals[j % 3] / total))
+        elif j >= 3 and j < 6:
+            expected.append(t_tot * (totals[j % 3] / total))
+        elif j >= 6 and j < 9:
+            expected.append(g_tot * (totals[j % 3] / total))
+        else:
+            expected.append(c_tot * (totals[j % 3] / total))
 
-    critical = chi2.ppf(prob, dof)
-    if abs(stat) >= critical:
-        print('Stop')
+    for k in range(0, len(d)):
+        val += ((d[k] - expected[k]) ** 2) / expected[k]
+
+    critical = chi2.ppf(prob, (classes - 1) * (values - 1))
+    if abs(val) >= critical:
+        return True
     else:
-        print('Continue')
+        return False
 
 # returns an integer representing the position
 def get_root_node(counts):
@@ -57,11 +72,13 @@ def get_root_node(counts):
             Ig_old = Ig_new
             position = i
 
-    if (Ig_old < split_criterion):
+    #if (Ig_old < split_criterion):
+    if (chi_square(counts, position)):
+        ## Split again!
+        return position
+    else:
         ## do not split anymore! Not worth it
         return -1
-    else:
-        return position
 
 
 if (__name__ == '__main__'):
