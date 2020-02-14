@@ -8,8 +8,10 @@ import pickle
 import data
 
 
-def dt_construct(d, blacklist, t):
+def dt_construct(raw, blacklist, t):
 
+    d = data.gen_dat(raw, blacklist)
+    #  read data from csv
     # calculate if it is worth splitting on that node
     # if yes, then split on that node ( remove that column from the data)
     #         call d_t contstruct on the remaining data
@@ -93,9 +95,9 @@ def get_root_node(counts):
 if (__name__ == '__main__'):
 
     # reads data from csv, and creates a 60 array of length 12 tuples 
-    d = data.gen_dat()#  read data from csv
+    raw = data.read_csv('training.csv')
     t = tree.Tree()
-    t = dt_construct(d, [], t)
+    t = dt_construct(raw, [], t)
 
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)

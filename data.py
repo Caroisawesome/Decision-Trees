@@ -6,11 +6,10 @@ def read_csv(filename):
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             data.append((row[0], row[1], row[2]))
-    #for d in data:
-    #    print(d)
+    #for d in data: #    print(d)
     return data
 
-def gen_dat():
+def gen_dat(x, blacklist):
     out = []
 
     an  = 0
@@ -28,8 +27,6 @@ def gen_dat():
     tn  = 0
     tie = 0
     tei = 0
-
-    x = read_csv('training.csv')
 
     for i in range(0, 60):
         for dat in x:
