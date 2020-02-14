@@ -1,8 +1,11 @@
+from scipy.stats import chi2
+#from scipy.stats import chi2_contingency
+
+import math
 import tree
 import impurity
 import pickle
 import data
-
 
 
 def dt_construct(d,t):
@@ -14,6 +17,29 @@ def dt_construct(d,t):
     # find Root node
     position_to_split = get_root_node(d)
     print("Posistion to split", position_to_split)
+
+def chi_square(data, index):
+    #stat, p, dof, expected = chi2_contigency(data)
+    total    = 0
+    d        = data[index]
+    expected = []
+    real     = []
+    a_tot    = d[0] + d[ 1] + d[ 2]
+    t_tot    = d[3] + d[ 4] + d[ 5]
+    g_tot    = d[6] + d[ 7] + d[ 8]
+    c_tot    = d[9] + d[10] + d[11]
+
+    for i in range(0, len(data[index])):
+       total += d[i] 
+    
+    #for x in data[index]:
+    #    expected.append((x / total))
+
+    critical = chi2.ppf(prob, dof)
+    if abs(stat) >= critical:
+        print('Stop')
+    else:
+        print('Continue')
 
 # returns an integer representing the position
 def get_root_node(counts):
