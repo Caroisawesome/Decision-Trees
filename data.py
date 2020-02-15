@@ -29,6 +29,8 @@ def gen_dat(x, blacklist):
     tei = 0
 
     for i in range(0, 60):
+        if i in blacklist:
+            continue
         for dat in x:
             #print(dat[1][i])
             if   dat[1][i] == 'A':
