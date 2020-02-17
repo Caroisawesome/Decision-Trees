@@ -28,8 +28,8 @@ def dt_construct(raw, blacklist, t):
         for i in range(0,num_segments):
             dt_construct(raw_segmented_data[i], blacklist, t)
 
-def split_data(data, index):
-    d     = data[index]
+def split_data(raw_data, index):
+
     a_dat = []
     t_dat = []
     g_dat = []
@@ -38,10 +38,12 @@ def split_data(data, index):
     vals = ['A', 'T', 'G', 'C']
     data_subsets = [a_dat, t_dat, g_dat, c_dat]
 
-    for i in d:
-        if i in vals:
-            idx = vals.idx[i]
-            data_subsets[idx].push(data[i])
+    for row in raw_data:
+        d = row[1]
+        value_at_index = d[index]
+        if value_at_index in vals:
+            idx = vals.index(value_at_index)
+            data_subsets[idx].append(row)
 
     return data_subsets
 
@@ -63,8 +65,11 @@ def chi_square(data, index):
     val      = 0
 
     for i in range(0, len(data[index])):
-        total += d[i] 
-    
+        total += d[i]
+
+    if total == 0:
+        return False
+
     for j in range(0, len(d)):
         if j < 3:
             expected.append(a_tot * (totals[j % 3] / total))
@@ -76,6 +81,7 @@ def chi_square(data, index):
             expected.append(c_tot * (totals[j % 3] / total))
 
     for k in range(0, len(d)):
+        # what to do if expected is 0??? 
         val += ((d[k] - expected[k]) ** 2) / expected[k]
 
     critical = chi2.ppf(prob, (classes - 1) * (values - 1))
@@ -87,7 +93,6 @@ def chi_square(data, index):
 # returns an integer representing the position
 def get_root_node(counts, blacklist):
     print("blacklist", blacklist)
-    print("counts length", len(counts))
     Ig_old = 0
     position = -1
     for i in range(0,60):
