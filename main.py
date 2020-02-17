@@ -22,11 +22,11 @@ def dt_construct(raw, blacklist, t):
 
         # TODO! add node to tree?
         blacklist.append(position_to_split)
-        segmented_data = split_data(raw, position_to_split)
+        raw_segmented_data = split_data(raw, position_to_split)
 
-        num_segments = len(segmented_data)
+        num_segments = len(raw_segmented_data)
         for i in range(0,num_segments):
-            dt_construct(segmented_data[i], blacklist, t)
+            dt_construct(raw_segmented_data[i], blacklist, t)
 
 def split_data(data, index):
     d     = data[index]
