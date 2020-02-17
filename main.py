@@ -11,16 +11,22 @@ import data
 def dt_construct(raw, blacklist, t):
 
     d = data.gen_dat(raw, blacklist)
-    #  read data from csv
+
     # calculate if it is worth splitting on that node
     # if yes, then split on that node ( remove that column from the data)
     #         call d_t contstruct on the remaining data
 
-    # find Root node
     position_to_split = get_root_node(d, blacklist)
-    if position_to_split >= 0:
-        blacklist.append(position_to_split)
     print("Position to split", position_to_split)
+    if position_to_split >= 0:
+
+        # TODO! add node to tree?
+        blacklist.append(position_to_split)
+        segmented_data = split_data(raw, position_to_split)
+
+        num_segments = len(segmented_data)
+        for i in range(0,num_segments):
+            dt_construct(segmented_data[i], blacklist, t)
 
 def split_data(data, index):
     d     = data[index]
@@ -29,6 +35,15 @@ def split_data(data, index):
     g_dat = []
     c_dat = []
 
+    vals = ['A', 'T', 'G', 'C']
+    data_subsets = [a_dat, t_dat, g_dat, c_dat]
+
+    for i in d:
+        if i in vals:
+            idx = vals.idx[i]
+            data_subsets[idx].push(data[i])
+
+    return data_subsets
 
 
 def chi_square(data, index):
@@ -71,12 +86,12 @@ def chi_square(data, index):
 
 # returns an integer representing the position
 def get_root_node(counts, blacklist):
-
+    print("blacklist", blacklist)
+    print("counts length", len(counts))
     Ig_old = 0
     position = -1
     for i in range(0,60):
-
-        if i in blacklist:
+        if i not in blacklist:
             Ig_new = impurity.information_gain(counts[i], 0)
 
             if Ig_new > Ig_old:
