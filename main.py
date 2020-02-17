@@ -17,7 +17,7 @@ def dt_construct(raw, blacklist, t):
     #         call d_t contstruct on the remaining data
 
     # find Root node
-    position_to_split = get_root_node(d)
+    position_to_split = get_root_node(d, blacklist)
     if position_to_split >= 0:
         blacklist.append(position_to_split)
     print("Position to split", position_to_split)
@@ -28,6 +28,8 @@ def split_data(data, index):
     t_dat = []
     g_dat = []
     c_dat = []
+
+
 
 def chi_square(data, index):
     #stat, p, dof, expected = chi2_contigency(data)
@@ -68,22 +70,19 @@ def chi_square(data, index):
         return False
 
 # returns an integer representing the position
-def get_root_node(counts):
-
-    # TODO: use chi square test!
-    # Constant, decides when to stop splitting
-    split_criterion = 0.05
+def get_root_node(counts, blacklist):
 
     Ig_old = 0
     position = -1
     for i in range(0,60):
-        Ig_new = impurity.information_gain(counts[i],0)
 
-        if Ig_new > Ig_old:
-            Ig_old = Ig_new
-            position = i
+        if i in blacklist:
+            Ig_new = impurity.information_gain(counts[i], 0)
 
-    #if (Ig_old < split_criterion):
+            if Ig_new > Ig_old:
+                Ig_old = Ig_new
+                position = i
+
     if (chi_square(counts, position)):
         ## Split again!
         return position
