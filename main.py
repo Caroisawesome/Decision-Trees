@@ -81,8 +81,9 @@ def chi_square(data, index):
             expected.append(c_tot * (totals[j % 3] / total))
 
     for k in range(0, len(d)):
-        # what to do if expected is 0??? 
-        val += ((d[k] - expected[k]) ** 2) / expected[k]
+        # what to do if expected is 0???
+        if (expected[k] != 0):
+            val += ((d[k] - expected[k]) ** 2) / expected[k]
 
     critical = chi2.ppf(prob, (classes - 1) * (values - 1))
     if abs(val) >= critical:
