@@ -7,7 +7,7 @@ import pickle
 import data
 
 
-def dt_construct(raw, blacklist, parent):
+def dt_construct(raw, blacklist, parent, attr):
 
     d = data.gen_data(raw, blacklist)
 
@@ -20,6 +20,7 @@ def dt_construct(raw, blacklist, parent):
     node.label = position_to_split
     print("Position to split", position_to_split)
     node.children = []
+    node.attr = attr
     if position_to_split >= 0:
 
         # TODO! add node to tree?
@@ -29,7 +30,15 @@ def dt_construct(raw, blacklist, parent):
 
         num_segments = len(raw_segmented_data)
         for i in range(0,num_segments):
-            dt_construct(raw_segmented_data[i], blacklist, node)
+            if i == 0:
+                dt_construct(raw_segmented_data[i], blacklist, node, 'A')
+            if i == 1:
+                dt_construct(raw_segmented_data[i], blacklist, node, 'T')
+            if i == 2:
+                dt_construct(raw_segmented_data[i], blacklist, node, 'G')
+            else:
+                dt_construct(raw_segmented_data[i], blacklist, node, 'C')
+
 
 def split_data(raw_data, index):
 
@@ -96,7 +105,7 @@ def chi_square(data, index):
 
 # returns an integer representing the position
 def get_root_node(counts, blacklist):
-    print("blacklist", blacklist)
+    #print("blacklist", blacklist)
     Ig_old = 0
     position = -1
     for i in range(0,60):
@@ -114,9 +123,9 @@ def get_root_node(counts, blacklist):
         ## do not split anymore! Not worth it
         return -1
 
-def print_tree(tree):
-    print("(" + str(tree.label), end='')
-    for i in tree.children:
+def print_tree(t):
+    print("(" + str(t.attr) + str(t.label), end='')
+    for i in t.children:
         print_tree(i)
     print(")", end='')
 
@@ -127,7 +136,8 @@ if (__name__ == '__main__'):
     raw = data.read_csv('training.csv')
     t = tree.Tree()
     t.children = []
-    dt_construct(raw, [], t)
+    t.attr     = ""
+    dt_construct(raw, [], t, "")
 
     print_tree(t)
     file = open('decision_tree',  'wb')
