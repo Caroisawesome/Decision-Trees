@@ -1,5 +1,4 @@
 from scipy.stats import chi2
-#from scipy.stats import chi2_contingency
 
 import math
 import tree
@@ -10,7 +9,7 @@ import data
 
 def dt_construct(raw, blacklist, t):
 
-    d = data.gen_dat(raw, blacklist)
+    d = data.gen_data(raw, blacklist)
 
     # calculate if it is worth splitting on that node
     # if yes, then split on that node ( remove that column from the data)
@@ -85,7 +84,7 @@ def chi_square(data, index):
         if (expected[k] != 0):
             val += ((d[k] - expected[k]) ** 2) / expected[k]
 
-    critical = chi2.ppf(prob, (classes - 1) * (values - 1))
+    critical = chi2.ppf(1 - prob, (classes - 1) * (values - 1))
     if abs(val) >= critical:
         return True
     else:

@@ -9,7 +9,7 @@ def read_csv(filename):
     #for d in data: #    print(d)
     return data
 
-def gen_dat(x, blacklist):
+def gen_data(x, blacklist):
     out = []
 
     an  = 0

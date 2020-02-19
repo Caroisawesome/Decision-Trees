@@ -4,4 +4,4 @@ class Tree(object):
         self.left  = None
         self.mid   = None
         self.right = None
-        self.data  = None
+        self.label = None
