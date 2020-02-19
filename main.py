@@ -7,25 +7,29 @@ import pickle
 import data
 
 
-def dt_construct(raw, blacklist, t):
+def dt_construct(raw, blacklist, parent):
 
     d = data.gen_data(raw, blacklist)
 
+    node = tree.Tree()
     # calculate if it is worth splitting on that node
     # if yes, then split on that node ( remove that column from the data)
     #         call d_t contstruct on the remaining data
 
     position_to_split = get_root_node(d, blacklist)
+    node.label = position_to_split
     print("Position to split", position_to_split)
+    node.children = []
     if position_to_split >= 0:
 
         # TODO! add node to tree?
+        parent.children.append(node)
         blacklist.append(position_to_split)
         raw_segmented_data = split_data(raw, position_to_split)
 
         num_segments = len(raw_segmented_data)
         for i in range(0,num_segments):
-            dt_construct(raw_segmented_data[i], blacklist, t)
+            dt_construct(raw_segmented_data[i], blacklist, node)
 
 def split_data(raw_data, index):
 
@@ -110,14 +114,22 @@ def get_root_node(counts, blacklist):
         ## do not split anymore! Not worth it
         return -1
 
+def print_tree(tree):
+    print("(" + str(tree.label), end='')
+    for i in tree.children:
+        print_tree(i)
+    print(")", end='')
+
 
 if (__name__ == '__main__'):
 
     # reads data from csv, and creates a 60 array of length 12 tuples 
     raw = data.read_csv('training.csv')
     t = tree.Tree()
-    t = dt_construct(raw, [], t)
+    t.children = []
+    dt_construct(raw, [], t)
 
+    print_tree(t)
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)
     file.close()
