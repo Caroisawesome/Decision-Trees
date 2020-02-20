@@ -1,5 +1,17 @@
 # Decision-Trees-ML
 
+This Decision-Tree-ML repo implements a ID3 decision tree algorithm that was trained using the data from `training.csv`. 
+
+## To run the program:
+
+Install dependencies:
+`pip install math`
+`pip install pickle`
+`pip install numpy`
+
+Run:
+`python main.py`
+
 ### Some functions:
 
 Gini_index 
