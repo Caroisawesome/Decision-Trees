@@ -2,6 +2,7 @@
 class Tree(object):
     def __init__(self):
         self.children = None
-        self.label    = None
-        self.attr = None
+        self.label    = 0
+        self.attr     = None
+        self.classification = None
 

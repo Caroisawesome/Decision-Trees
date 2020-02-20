@@ -9,6 +9,15 @@ def read_csv(filename):
     #for d in data: #    print(d)
     return data
 
+def read_test_csv(filename):
+    data = []
+    with open(filename, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        for row in reader:
+            data.append((row[0], row[1]))
+    #for d in data: #    print(d)
+    return data
+
 def gen_data(x, blacklist):
     out = []
 

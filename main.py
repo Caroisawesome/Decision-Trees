@@ -6,6 +6,23 @@ import impurity
 import pickle
 import data
 
+def classify_data(tree):
+    testing = data.read_test_csv('testing.csv')
+    dat    = []
+    for x in testing:
+        dat.append((testing[0], classify(testing[1], tree)))
+    print(dat)
+
+
+def classify(line, parent):
+    if parent.label != -1:
+        idx = int(parent.label)
+        if idx >= 0:
+            val = line[idx]
+        for c in parent.children:
+            if c == val:
+                parent.classification = classify_data(c)
+        return parent.classification
 
 def dt_construct(raw, blacklist, parent, attr):
 
@@ -136,9 +153,11 @@ if (__name__ == '__main__'):
     raw = data.read_csv('training.csv')
     t = tree.Tree()
     t.children = []
+    t.label    = ""
     t.attr     = ""
     dt_construct(raw, [], t, "")
 
+    classify_data(t)
     print_tree(t)
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)
