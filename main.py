@@ -10,13 +10,15 @@ def classify_data(tree):
     testing = data.read_test_csv('testing.csv')
     dat    = []
     for x in testing:
-        dat.append((testing[0], classify(testing[1], tree)))
+        dat.append((x[0], classify(x[1], tree)))
     print(dat)
 
 
 def classify(line, parent):
     if parent.label != -1:
-        idx = int(parent.label)
+        idx = parent.label
+        #print(idx)
+        #print(line)
         if idx >= 0:
             val = line[idx]
         for c in parent.children:
@@ -35,7 +37,7 @@ def dt_construct(raw, blacklist, parent, attr):
 
     position_to_split = get_root_node(d, blacklist)
     node.label = position_to_split
-    print("Position to split", position_to_split)
+    #print("Position to split", node.label)
     node.children = []
     node.attr = attr
     if position_to_split >= 0:
@@ -153,12 +155,12 @@ if (__name__ == '__main__'):
     raw = data.read_csv('training.csv')
     t = tree.Tree()
     t.children = []
-    t.label    = ""
+    t.label    = 0
     t.attr     = ""
     dt_construct(raw, [], t, "")
 
     classify_data(t)
-    print_tree(t)
+    #print_tree(t)
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)
     file.close()
