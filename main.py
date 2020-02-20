@@ -57,8 +57,20 @@ def dt_construct(raw, blacklist, parent, attr):
                 dt_construct(raw_segmented_data[i], blacklist, node, 'G')
             else:
                 dt_construct(raw_segmented_data[i], blacklist, node, 'C')
+    else:
+        cl = get_classification(raw)
+        node.classification = cl
+        parent.children.append(node)
 
-
+def get_classification(data):
+    counts = [0,0,0] # N, IE, EI
+    vals = ['N', 'IE', 'EI']
+    for row in data:
+        idx = vals.index(row[2])
+        counts[idx] += 1
+    idx = counts.index(max(counts))
+    return vals[idx]
+    
 def split_data(raw_data, index):
 
     a_dat = []
@@ -143,7 +155,7 @@ def get_root_node(counts, blacklist):
         return -1
 
 def print_tree(t):
-    print("(" + str(t.attr) + str(t.label), end='')
+    print("(" + str(t.attr) + str(t.label) + str(t.classification), end='')
     for i in t.children:
         print_tree(i)
     print(")", end='')
