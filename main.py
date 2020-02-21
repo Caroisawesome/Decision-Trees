@@ -15,16 +15,18 @@ def classify_data(tree):
 
 
 def classify(line, parent):
-    if parent.label != -1:
-        idx = parent.label
-        #print(idx)
-        #print(line)
-        if idx >= 0:
-            val = line[idx]
-        for c in parent.children:
-            if c == val:
-                parent.classification = classify_data(c)
-        return parent.classification
+    idx = parent.label
+    val = ''
+    #print(idx)
+    #print(line)
+    #if idx >= 0:
+    val = line[idx]
+    #print('value ' + val)
+    for c in parent.children:
+        print('attribute ' + c.attr)
+        if c.attr == val:
+            parent.classification = classify(line, c)
+    return parent.classification
 
 def dt_construct(raw, blacklist, parent, attr):
 
@@ -34,12 +36,14 @@ def dt_construct(raw, blacklist, parent, attr):
     # calculate if it is worth splitting on that node
     # if yes, then split on that node ( remove that column from the data)
     #         call d_t contstruct on the remaining data
-
+    #
     position_to_split = get_root_node(d, blacklist)
-    node.label = position_to_split
-    #print("Position to split", node.label)
-    node.children = []
-    node.attr = attr
+    if position_to_split != -1:
+        node.label = position_to_split
+        print("Position to split", node.label)
+        node.children = []
+        node.attr = attr
+    #parent.attr = attr
     if position_to_split >= 0:
 
         # TODO! add node to tree?
