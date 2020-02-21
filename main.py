@@ -5,6 +5,7 @@ import tree
 import impurity
 import pickle
 import data
+import sys
 
 def classify_data(tree):
     testing = data.read_test_csv('testing.csv')
@@ -28,7 +29,7 @@ def classify(line, parent):
             parent.classification = classify(line, c)
     return parent.classification
 
-def dt_construct(raw, blacklist, parent, attr):
+def dt_construct(raw, blacklist, parent, attr, confidence_level, impurity_type):
 
     d = data.gen_data(raw, blacklist)
 
@@ -37,7 +38,7 @@ def dt_construct(raw, blacklist, parent, attr):
     # if yes, then split on that node ( remove that column from the data)
     #         call d_t contstruct on the remaining data
     #
-    position_to_split = get_root_node(d, blacklist)
+    position_to_split = get_root_node(d, blacklist, confidence_level, impurity_type)
     if position_to_split != -1:
         node.label = position_to_split
         print("Position to split", node.label)
@@ -46,7 +47,6 @@ def dt_construct(raw, blacklist, parent, attr):
     #parent.attr = attr
     if position_to_split >= 0:
 
-        # TODO! add node to tree?
         parent.children.append(node)
         blacklist.append(position_to_split)
         raw_segmented_data = split_data(raw, position_to_split)
@@ -54,13 +54,13 @@ def dt_construct(raw, blacklist, parent, attr):
         num_segments = len(raw_segmented_data)
         for i in range(0,num_segments):
             if i == 0:
-                dt_construct(raw_segmented_data[i], blacklist, node, 'A')
+                dt_construct(raw_segmented_data[i], blacklist, node, 'A', confidence_level, impurity_type)
             if i == 1:
-                dt_construct(raw_segmented_data[i], blacklist, node, 'T')
+                dt_construct(raw_segmented_data[i], blacklist, node, 'T',confidence_level, impurity_type)
             if i == 2:
-                dt_construct(raw_segmented_data[i], blacklist, node, 'G')
+                dt_construct(raw_segmented_data[i], blacklist, node, 'G',confidence_level, impurity_type)
             else:
-                dt_construct(raw_segmented_data[i], blacklist, node, 'C')
+                dt_construct(raw_segmented_data[i], blacklist, node, 'C',confidence_level, impurity_type)
     else:
         cl = get_classification(raw)
         node.classification = cl
@@ -95,7 +95,7 @@ def split_data(raw_data, index):
     return data_subsets
 
 
-def chi_square(data, index):
+def chi_square(data, index, confidence_level):
     #stat, p, dof, expected = chi2_contigency(data)
     classes  = 3
     values   = 4
@@ -103,6 +103,14 @@ def chi_square(data, index):
     total    = 0
     d        = data[index]
     expected = []
+
+    if confidence_level == 0:
+        prob = 0.95
+    elif confidence_level ==1:
+        prob = 0.99
+    else:
+        prob = 0
+
     # totals[0] = n, totals[1] = ie, totals[2] = ei
     totals   =  [d[0] + d[3] + d[6] + d[ 9], d[1] + d[4] + d[7] + d[10], d[2] + d[5] + d[8] + d[11]]
     a_tot    = d[0] + d[ 1] + d[ 2]
@@ -139,19 +147,19 @@ def chi_square(data, index):
         return False
 
 # returns an integer representing the position
-def get_root_node(counts, blacklist):
+def get_root_node(counts, blacklist, confidence_level, impurity_type):
     #print("blacklist", blacklist)
     Ig_old = 0
     position = -1
     for i in range(0,60):
         if i not in blacklist:
-            Ig_new = impurity.information_gain(counts[i], 0)
+            Ig_new = impurity.information_gain(counts[i], impurity_type)
 
             if Ig_new > Ig_old:
                 Ig_old = Ig_new
                 position = i
 
-    if (chi_square(counts, position)):
+    if (chi_square(counts, position, confidence_level)):
         ## Split again!
         return position
     else:
@@ -167,13 +175,22 @@ def print_tree(t):
 
 if (__name__ == '__main__'):
 
+    if len( sys.argv) < 3:
+        print("Must enter commandline arguments <confidence_level> and <impurity_type>")
+        print("confidence_level: 0 -> 95%, 1 -> 99%, 2 -> 0%")
+        print("impurity_type: 0 -> Entropy, 1 -> Gini Index, 2 -> Missclassification Error")
+        exit(0)
+
+    confidence_level = int(sys.argv[1])
+    impurity_type = int(sys.argv[2])
+
     # reads data from csv, and creates a 60 array of length 12 tuples 
     raw = data.read_csv('training.csv')
     t = tree.Tree()
     t.children = []
     t.label    = 0
     t.attr     = ""
-    dt_construct(raw, [], t, "")
+    dt_construct(raw, [], t, "", confidence_level, impurity_type)
 
     classify_data(t)
     #print_tree(t)
