@@ -12,6 +12,13 @@ Install dependencies:
 Run:
 `python main.py`
 
+
+## Files:
+
+`main.py` contains the main function that starts the ID3 algorithm. Reads data from `training.csv` and builds up a decision tree.
+
+`impurity.py` contains methods that calculate the information gain, either by calculating the entropy of the data, or by using Gini Index or Missclassification Error.
+
 ### Some functions:
 
 Gini_index 
