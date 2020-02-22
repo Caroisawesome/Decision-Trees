@@ -6,27 +6,30 @@ import impurity
 import pickle
 import data
 
-def classify_data(tree):
+def classify_data(t):
     testing = data.read_test_csv('testing.csv')
     dat    = []
     for x in testing:
-        dat.append((x[0], classify(x[1], tree)))
+        dat.append((x[0], classify(x[1], t)))
     print(dat)
+    write_csv(dat)
+    #print_tree(t)
 
 
-def classify(line, parent):
-    idx = parent.label
-    val = ''
+def classify(line, t):
+    idx = t.label
     #print(idx)
     #print(line)
-    #if idx >= 0:
-    val = line[idx]
-    #print('value ' + val)
-    for c in parent.children:
-        print('attribute ' + c.attr)
-        if c.attr == val:
-            parent.classification = classify(line, c)
-    return parent.classification
+    if idx < 0:
+        return t.classification
+    else:
+        val = line[idx]
+        #print('index ' + str(idx))
+        for c in t.children:
+            #print('attribute ' + c.attr)
+            if c.attr == val:
+                return classify(line, c)
+
 
 def dt_construct(raw, blacklist, parent, attr):
 
@@ -38,13 +41,13 @@ def dt_construct(raw, blacklist, parent, attr):
     #         call d_t contstruct on the remaining data
     #
     position_to_split = get_root_node(d, blacklist)
-    if position_to_split != -1:
-        node.label = position_to_split
-        print("Position to split", node.label)
-        node.children = []
-        node.attr = attr
-    #parent.attr = attr
+    node.children = []
+    node.attr = attr
+
     if position_to_split >= 0:
+        node.label = position_to_split
+
+
 
         # TODO! add node to tree?
         parent.children.append(node)
@@ -99,7 +102,7 @@ def chi_square(data, index):
     #stat, p, dof, expected = chi2_contigency(data)
     classes  = 3
     values   = 4
-    prob     = 0.95
+    prob     = 0.99
     total    = 0
     d        = data[index]
     expected = []
@@ -132,7 +135,7 @@ def chi_square(data, index):
         if (expected[k] != 0):
             val += ((d[k] - expected[k]) ** 2) / expected[k]
 
-    critical = chi2.ppf(1 - prob, (classes - 1) * (values - 1))
+    critical = chi2.ppf(prob, (classes - 1) * (values - 1))
     if abs(val) >= critical:
         return True
     else:
@@ -175,7 +178,7 @@ if (__name__ == '__main__'):
     t.attr     = ""
     dt_construct(raw, [], t, "")
 
-    classify_data(t)
+    classify_data(t.children[0])
     #print_tree(t)
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)
