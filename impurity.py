@@ -22,10 +22,11 @@ def information_gain(data, imp):
             HD -= P_nucleotides[i]*HDA
         return HD
 
-    elif(imp ==1):
-        # TODO!
-        print("need to do gini index")
-        return 0
+    elif(imp == 1):
+        Gi = gini_index(P_nucleotides, P_nucl_outcomes)
+
+        #TODO!!
+        return Gi
     else:
         # TODO!
         print("need to do missclassificationError")
@@ -87,16 +88,6 @@ def get_outcome_probabilities(data):
     prob_each_outcome = [x / total for x in total_each_outcome]
     return prob_each_outcome
 
-
-# type: 3integer. 0 to calculate missclassificationError, 1 to calculate entropy, 2 to calculate giniIndex
-def impurity(type, data):
-    if (type == 0):
-        missclassification_error(data)
-    elif (type == 1):
-        entropy(data)
-    else:
-        gini_index(data)
-
 def missclassification_error(data):
     return 0
 
@@ -110,11 +101,14 @@ def entropy(data):
     return ent
 
 # data: array of probabilities ?
-def gini_index(data):
+def gini_index(P_nucleotide, P_nucl_outcomes):
 
-    sum = 0;
-    for p in data:
-        sum += p ** 2
+    sum = 0
+    for i in len(P_nucleotide):
+        gini_outcomes = 1
+        for j in range(0,3):
+            idx = i*3 + j
+            gini_outcomes -= P_nucl_outcomes[idx]**2
 
-    return 1 - sum
-
+        sum += P_nucleotide[i]
+    return sum

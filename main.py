@@ -31,15 +31,15 @@ def classify(line, t):
             if c.attr == val:
                 return classify(line, c)
 
-
+# Find next optimal position to split
+# calculate if it is worth splitting on that node
+# if yes, then split on that node ( remove that column from the data)
+#         call d_t contstruct on the remaining data
 def dt_construct(raw, blacklist, parent, attr, confidence_level, impurity_type):
 
     d = data.gen_data(raw, blacklist)
 
     node = tree.Tree()
-    # calculate if it is worth splitting on that node
-    # if yes, then split on that node ( remove that column from the data)
-    #         call d_t contstruct on the remaining data
     #
     position_to_split = get_root_node(d, blacklist, confidence_level, impurity_type)
     node.children = []
@@ -69,6 +69,8 @@ def dt_construct(raw, blacklist, parent, attr, confidence_level, impurity_type):
         node.classification = cl
         parent.children.append(node)
 
+# Determine what the classification should be for the remaining data.
+# Returns the classification that appears the most in the remaining data.
 def get_classification(data):
     counts = [0,0,0] # N, IE, EI
     vals = ['N', 'IE', 'EI']
@@ -77,7 +79,10 @@ def get_classification(data):
         counts[idx] += 1
     idx = counts.index(max(counts))
     return vals[idx]
-    
+
+
+# Splits the raw data from the csv file, into 4 subsets
+# Each row is added to the subset with the matching nucleotide at the given index in the nucleotide string
 def split_data(raw_data, index):
 
     a_dat = []
