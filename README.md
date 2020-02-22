@@ -6,12 +6,16 @@ This Decision-Tree-ML repo implements a ID3 decision tree algorithm that was tra
 
 Install dependencies:
 `pip install math`
+
 `pip install pickle`
+
 `pip install numpy`
 
 Run:
 `python main.py <confidence_level> <impurity_type>`
+
 `confidence_level`: {0,1,2} - 0: 95%, 1: 99%, 2: 0%
+
 `impurity_type`: {0,1,2} - 0: Entropy, 1: Gini Index, 2: Missclassification Error
 
 ## Files:
