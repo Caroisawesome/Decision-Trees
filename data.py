@@ -53,25 +53,32 @@ def gen_data(x, blacklist):
                 idx_cls = classes.index(clss)
                 sums[idx_cls][idx_val] += 1
             elif val == 'N':
-                r = rnd.randrange(3)
+                #r = rnd.randrange(3)
                 idx_cls = classes.index(clss)
-                sums[idx_cls][r] += 1
+                sums[idx_cls][0] += 1
+                sums[idx_cls][1] += 1
+                sums[idx_cls][2] += 1
+                sums[idx_cls][3] += 1
             elif val == 'D':
-                r = rnd.randrange(2)
+                #r = rnd.randrange(2)
                 idx_cls = classes.index(clss)
-                sums[idx_cls][r] += 1
+                sums[idx_cls][0] += 1
+                sums[idx_cls][1] += 1
+                sums[idx_cls][2] += 1
             elif val == 'S':
                 r = rnd.randrange(2,3)
                 idx_cls = classes.index(clss)
-                sums[idx_cls][r] += 1
+                sums[idx_cls][2] += 1
+                sums[idx_cls][3] += 1
             elif val == 'R':
-                r = rnd.randrange(2)
-                if r == 0:
-                    r = 0
-                else:
-                    r = 2
+                #r = rnd.randrange(2)
+                #if r == 0:
+                #    r = 0
+                #else:
+                #    r = 2
                 idx_cls = classes.index(clss)
-                sums[idx_cls][r] += 1
+                sums[idx_cls][0] += 1
+                sums[idx_cls][2] += 1
                 
 
         out.append((sums[0][0], sums[1][0], sums[2][0], sums[0][1], sums[1][1], sums[2][1], sums[0][2], sums[1][2], sums[2][2], sums[0][3], sums[1][3], sums[2][3]))
