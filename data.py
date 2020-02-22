@@ -11,8 +11,8 @@ def read_csv(filename):
     #for d in data: #    print(d)
     return data
 
-def write_csv(data):
-    file = 'output.csv'
+def write_csv(data, name):
+    file = 'output' + name + '.csv'
     with open(file, 'w') as csvfile:
         writer = csv.writer(csvfile, delimiter = ',')
         writer.writerow(['id', 'class'])
