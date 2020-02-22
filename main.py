@@ -4,7 +4,6 @@ import random as rnd
 import math
 import tree
 import impurity
-import pickle
 import data
 import sys
 
@@ -222,11 +221,4 @@ if (__name__ == '__main__'):
     t.label    = 0
     t.attr     = ""
     dt_construct(raw, [], t, "", confidence_level, impurity_type)
-
     classify_data(t.children[0])
-    #print_tree(t)
-    file = open('decision_tree',  'wb')
-    pickle.dump(t, file)
-    file.close()
-
-    
