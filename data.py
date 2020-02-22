@@ -1,5 +1,4 @@
 import csv
-import random
 
 def read_csv(filename):
     data = []
@@ -30,7 +29,6 @@ def read_test_csv(filename):
 def gen_data(x, blacklist):
     out = []
 
-    r   = 0
     an  = 0
     aie = 0
     aei = 0
@@ -85,25 +83,6 @@ def gen_data(x, blacklist):
                     cie += 1
                 elif dat[2] == "EI":
                     cei += 1
-
-            elif dat[1][i] == 'D' or dat[1][i] == 'N' or dat[1][i] == 'S' or dat[1][i] == 'R':
-                r = random.randrange(3)
-                if r == 0:
-                    if   dat[2] == "N":
-                        an += 1
-                    elif dat[2] == "IE":
-                        aie += 1
-                    elif dat[2] == "EI":
-                        aei += 1
-                if r == 1:
-                    if   dat[2] == "N":
-                        tn += 1
-                    elif dat[2] == "IE":
-                        tie += 1
-                    elif dat[2] == "EI":
-                        tei += 1
-
-
 
         #print(str(an) + ", " + str(aie) + ", " + str(aei) + ", " + str(tn) + ", " + str(tie) + ", " + str(tei) + ", " + str(gn) + ", " + str(gie) + ", " + str(gei) + ", " + str(cn) + ", " + str(cie) + ", " + str(cei))
 

@@ -13,7 +13,7 @@ def classify_data(t):
     for x in testing:
         dat.append((x[0], classify(x[1], t)))
     print(dat)
-    write_csv(dat)
+    data.write_csv(dat)
     #print_tree(t)
 
 
@@ -42,11 +42,8 @@ def dt_construct(raw, blacklist, parent, attr, confidence_level, impurity_type):
     #         call d_t contstruct on the remaining data
     #
     position_to_split = get_root_node(d, blacklist, confidence_level, impurity_type)
-    if position_to_split != -1:
-        node.label = position_to_split
-        print("Position to split", node.label)
-        node.children = []
-        node.attr = attr
+    node.children = []
+    node.attr = attr
     #parent.attr = attr
     if position_to_split >= 0:
         node.label = position_to_split
@@ -181,7 +178,7 @@ def print_tree(t):
 
 if (__name__ == '__main__'):
 
-    if len( sys.argv) < 3:
+    if len(sys.argv) < 3:
         print("Must enter commandline arguments <confidence_level> and <impurity_type>")
         print("confidence_level: 0 -> 95%, 1 -> 99%, 2 -> 0%")
         print("impurity_type: 0 -> Entropy, 1 -> Gini Index, 2 -> Missclassification Error")
