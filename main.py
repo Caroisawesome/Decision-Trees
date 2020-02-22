@@ -8,13 +8,13 @@ import pickle
 import data
 import sys
 
-def classify_data(t):
+def classify_data(t, p1, p2):
     testing = data.read_test_csv('testing.csv')
     dat    = []
     for x in testing:
         dat.append((x[0], classify(x[1], t)))
     print(dat)
-    data.write_csv(dat)
+    data.write_csv(dat, (str(p1) + str(p2)))
     #print_tree(t)
 
 
@@ -223,7 +223,7 @@ if (__name__ == '__main__'):
     t.attr     = ""
     dt_construct(raw, [], t, "", confidence_level, impurity_type)
 
-    classify_data(t.children[0])
+    classify_data(t.children[0], confidence_level, impurity_type)
     #print_tree(t)
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)
