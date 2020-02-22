@@ -61,11 +61,15 @@ def gen_data(x, blacklist):
                 idx_cls = classes.index(clss)
                 sums[idx_cls][r] += 1
             elif val == 'S':
-                r = rnd.randrange(1)
+                r = rnd.randrange(2,3)
                 idx_cls = classes.index(clss)
                 sums[idx_cls][r] += 1
             elif val == 'R':
-                r = rnd.randrange(1)
+                r = rnd.randrange(2)
+                if r == 0:
+                    r = 0
+                else:
+                    r = 2
                 idx_cls = classes.index(clss)
                 sums[idx_cls][r] += 1
                 
