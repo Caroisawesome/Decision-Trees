@@ -23,10 +23,15 @@ def information_gain(data, imp):
         return HD
 
     elif(imp == 1):
-        Gi = gini_index(P_nucleotides, P_nucl_outcomes)
+        Imp_D = gini_index(P_outcomes)
+        for i in range(0,4):
+            index = i * 3
+            imp_d_nucl = gini_index([P_nucl_outcome[index], P_nucl_outcome[index+1],P_nucl_outcome[index+2]])
+            Imp_D -= P_nucleotides[i]*imp_d_nucl
 
-        #TODO!!
-        return Gi
+        return Imp_D
+
+
     else:
         # TODO!
         print("need to do missclassificationError")
@@ -100,15 +105,8 @@ def entropy(data):
             ent += -1 * p * (math.log(p))
     return ent
 
-# data: array of probabilities ?
-def gini_index(P_nucleotide, P_nucl_outcomes):
-
+def gini_index(p_outcomes):
     sum = 0
-    for i in len(P_nucleotide):
-        gini_outcomes = 1
-        for j in range(0,3):
-            idx = i*3 + j
-            gini_outcomes -= P_nucl_outcomes[idx]**2
-
-        sum += P_nucleotide[i]
-    return sum
+    for i in range(0, len(p_outcomes)):
+        sum += p_outcomes[i]**2
+    return 1 - sum
