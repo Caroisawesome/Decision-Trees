@@ -1,5 +1,6 @@
 import csv
 import numpy as np
+import random as rnd
 
 def read_csv(filename):
     data = []
@@ -35,22 +36,39 @@ def gen_data(x, blacklist):
         # but, after further consideration, we might not need to blacklist these after all?
         #if i in blacklist:
         #    continue
-
-
         sums = np.zeros((3,4))
 
         for dat in x:
-
-            nucl = ['A', 'T', 'G', 'C']
+            nucl    = ['A', 'T', 'G', 'C']
+            N       = ['A', 'T', 'G', 'C']
+            D       = ['A', 'T', 'G']
+            S       = ['C', 'G']
+            R       = ['A', 'G']
             classes = ['N', 'IE', 'EI']
             val = dat[1][i] # A, T, G, C
-            cls = dat[2] # N, IE , EI
+            clss = dat[2] # N, IE , EI
 
             if val != 'N' and val != 'D' and val != 'S' and val != 'R':
                 idx_val = nucl.index(val)
-                idx_cls = classes.index(cls)
-
+                idx_cls = classes.index(clss)
                 sums[idx_cls][idx_val] += 1
+            elif val == 'N':
+                r = rnd.randrange(3)
+                idx_cls = classes.index(clss)
+                sums[idx_cls][r] += 1
+            elif val == 'D':
+                r = rnd.randrange(2)
+                idx_cls = classes.index(clss)
+                sums[idx_cls][r] += 1
+            elif val == 'S':
+                r = rnd.randrange(1)
+                idx_cls = classes.index(clss)
+                sums[idx_cls][r] += 1
+            elif val == 'R':
+                r = rnd.randrange(1)
+                idx_cls = classes.index(clss)
+                sums[idx_cls][r] += 1
+                
 
         out.append((sums[0][0], sums[1][0], sums[2][0], sums[0][1], sums[1][1], sums[2][1], sums[0][2], sums[1][2], sums[2][2], sums[0][3], sums[1][3], sums[2][3]))
 

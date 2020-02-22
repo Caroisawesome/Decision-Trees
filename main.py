@@ -109,7 +109,7 @@ def chi_square(data, index, confidence_level):
 
     if confidence_level == 0:
         prob = 0.95
-    elif confidence_level ==1:
+    elif confidence_level == 1:
         prob = 0.99
     else:
         prob = 0

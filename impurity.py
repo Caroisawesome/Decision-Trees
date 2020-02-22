@@ -17,10 +17,9 @@ def information_gain(data, imp):
     if (imp == 0):
         HD = entropy(P_outcomes)
         for i in range(0,4):
-            index = i*3
+            index = i * 3
             HDA = entropy([P_nucl_outcome[index], P_nucl_outcome[index+1],P_nucl_outcome[index+2]])
             HD -= P_nucleotides[i]*HDA
-
         return HD
 
     elif(imp ==1):
@@ -99,7 +98,7 @@ def impurity(type, data):
         gini_index(data)
 
 def missclassification_error(data):
-        return 0
+    return 0
 
 
 # data: array of probabilities 
