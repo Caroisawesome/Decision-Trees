@@ -1,4 +1,5 @@
 import csv
+import numpy as np
 
 def read_csv(filename):
     data = []
@@ -29,78 +30,28 @@ def read_test_csv(filename):
 def gen_data(x, blacklist):
     out = []
 
-    an  = 0
-    aie = 0
-    aei = 0
-
-    gn  = 0
-    gie = 0
-    gei = 0
-
-    cn  = 0
-    cie = 0
-    cei = 0
-
-    tn  = 0
-    tie = 0
-    tei = 0
-
     for i in range(0, 60):
         # NOTE: removed for testing purposes!
         # but, after further consideration, we might not need to blacklist these after all?
         #if i in blacklist:
         #    continue
+
+
+        sums = np.zeros((3,4))
+
         for dat in x:
-            #print(dat[1][i])
-            if   dat[1][i] == 'A':
-                if   dat[2] == "N":
-                    an += 1
-                elif dat[2] == "IE":
-                    aie += 1
-                elif dat[2] == "EI":
-                    aei += 1
 
-            elif dat[1][i] == 'T':
-                if   dat[2] == "N":
-                    tn += 1
-                elif dat[2] == "IE":
-                    tie += 1
-                elif dat[2] == "EI":
-                    tei += 1
+            nucl = ['A', 'T', 'G', 'C']
+            classes = ['N', 'IE', 'EI']
+            val = dat[1][i] # A, T, G, C
+            cls = dat[2] # N, IE , EI
 
-            elif dat[1][i] == 'G':
-                if   dat[2] == "N":
-                    gn += 1
-                elif dat[2] == "IE":
-                    gie += 1
-                elif dat[2] == "EI":
-                    gei += 1
+            if val != 'N' and val != 'D' and val != 'S' and val != 'R':
+                idx_val = nucl.index(val)
+                idx_cls = classes.index(cls)
 
-            elif dat[1][i] == 'C':
-                if   dat[2] == "N":
-                    cn += 1
-                elif dat[2] == "IE":
-                    cie += 1
-                elif dat[2] == "EI":
-                    cei += 1
+                sums[idx_cls][idx_val] += 1
 
-        #print(str(an) + ", " + str(aie) + ", " + str(aei) + ", " + str(tn) + ", " + str(tie) + ", " + str(tei) + ", " + str(gn) + ", " + str(gie) + ", " + str(gei) + ", " + str(cn) + ", " + str(cie) + ", " + str(cei))
-
-        out.append((an, aie, aei, tn, tie, tei, gn, gie, gei, cn, cie, cei))
-        an  = 0
-        aie = 0
-        aei = 0
-
-        gn  = 0
-        gie = 0
-        gei = 0
-
-        cn  = 0
-        cie = 0
-        cei = 0
-
-        tn  = 0
-        tie = 0
-        tei = 0
+        out.append((sums[0][0], sums[1][0], sums[2][0], sums[0][1], sums[1][1], sums[2][1], sums[0][2], sums[1][2], sums[2][2], sums[0][3], sums[1][3], sums[2][3]))
 
     return out
