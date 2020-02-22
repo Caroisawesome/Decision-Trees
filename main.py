@@ -1,4 +1,5 @@
 from scipy.stats import chi2
+import random as rnd
 
 import math
 import tree
@@ -19,17 +20,39 @@ def classify_data(t):
 
 def classify(line, t):
     idx = t.label
+    N   = ['A', 'T', 'G', 'C']
+    D   = ['A', 'T', 'G']
+    S   = ['C', 'G']
+    R   = ['A', 'G']
+    r   = 0
     #print(idx)
     #print(line)
     if idx < 0:
         return t.classification
     else:
         val = line[idx]
-        #print('index ' + str(idx))
-        for c in t.children:
-            #print('attribute ' + c.attr)
-            if c.attr == val:
-                return classify(line, c)
+
+    if val == 'N':
+        r = rnd.randrange(3)
+        new = N[r]
+        val = new
+    elif val == 'D':
+        r = rnd.randrange(2)
+        new = D[r]
+        val = new
+    elif val == 'S':
+        r = rnd.randrange(1)
+        new = S[r]
+        val = new
+    elif val == 'R':
+        r = rnd.randrange(1)
+        new = R[r]
+        val = new
+
+    for c in t.children:
+        #print('attribute ' + c.attr)
+        if c.attr == val:
+            return classify(line, c)
 
 # Find next optimal position to split
 # calculate if it is worth splitting on that node
@@ -205,3 +228,5 @@ if (__name__ == '__main__'):
     file = open('decision_tree',  'wb')
     pickle.dump(t, file)
     file.close()
+
+    
