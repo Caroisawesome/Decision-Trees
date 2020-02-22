@@ -31,11 +31,16 @@ def information_gain(data, imp):
 
         return Imp_D
 
-
     else:
-        # TODO!
-        print("need to do missclassificationError")
-        return 0
+
+        Imp_D = miss_error(P_outcomes)
+        for i in range(0,4):
+            index = i * 3
+            imp_d_nucl = miss_error([P_nucl_outcome[index], P_nucl_outcome[index+1],P_nucl_outcome[index+2]])
+            Imp_D -= P_nucleotides[i]*imp_d_nucl
+
+        return Imp_D
+
 
 
 # Get the probability of each (nucleotide, outcome) pair
@@ -93,8 +98,8 @@ def get_outcome_probabilities(data):
     prob_each_outcome = [x / total for x in total_each_outcome]
     return prob_each_outcome
 
-def missclassification_error(data):
-    return 0
+def miss_error(data):
+    return 1 - max(data)
 
 
 # data: array of probabilities 
