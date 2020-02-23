@@ -5,13 +5,11 @@ This Decision-Tree-ML repo implements a ID3 decision tree algorithm that was tra
 ## To run the program:
 
 ### Install dependencies:
-`pip install math`
-
-`pip install pickle`
-
-`pip install numpy`
+`make install`
 
 ### Run:
+
+`make all` : Runs every combination of confidence level and impurity type.
 `python main.py <confidence_level> <impurity_type>`
 
 `confidence_level`: {0,1,2} - 0: 95%, 1: 99%, 2: 0%
