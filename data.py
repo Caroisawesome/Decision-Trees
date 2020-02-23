@@ -3,6 +3,12 @@ import numpy as np
 import random as rnd
 
 def read_csv(filename):
+    """
+
+    Function for reading training data csv files.
+    Takes filename as argument.
+
+    """
     data = []
     with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
@@ -12,6 +18,11 @@ def read_csv(filename):
     return data
 
 def write_csv(data, name):
+    """
+
+    Write data to csv file. Takes data and desired filename.
+
+    """
     file = 'output' + name + '.csv'
     with open(file, 'w') as csvfile:
         writer = csv.writer(csvfile, delimiter = ',')
@@ -20,15 +31,27 @@ def write_csv(data, name):
             writer.writerow(x)
 
 def read_test_csv(filename):
+    """
+
+    Function for reading testing data csv file.
+    Takes filename as an argument.
+
+    """
     data = []
     with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             data.append((row[0], row[1]))
-    #for d in data: #    print(d)
     return data
 
 def gen_data(x, blacklist):
+    """
+
+    Function which takes a set of raw data and generates a set of counts for each position, 0 - 60
+    and creates a list of tuples. These tuples are then used when computing the various impurity
+    types for each positiion.
+    
+    """
     out = []
 
     for i in range(0, 60):
@@ -53,6 +76,8 @@ def gen_data(x, blacklist):
                 idx_cls = classes.index(clss)
                 sums[idx_cls][idx_val] += 1
             elif val == 'N':
+                # Can also just randomly choose a value to increment, for now we simply
+                # increment all possible values for N, D, S, and R.
                 #r = rnd.randrange(3)
                 idx_cls = classes.index(clss)
                 #sums[idx_cls][r] += 1

@@ -1,9 +1,14 @@
 import math
 import numpy as np
 
-# data = a row of data containing counts [ AN, AIE, AEI, TN, ... GN, ... , CN, ... ]
-# imp : { 0, 1, 2 } where 0 calculates entropy, 1 calculates gini index, and 2 missclassificationError
 def information_gain(data, imp):
+    """
+
+    data = a row of data containing counts [ AN, AIE, AEI, TN, ... GN, ... , CN, ... ]
+    imp : { 0, 1, 2 } where 0 calculates entropy, 1 calculates gini index, and 2 
+    missclassificationError
+
+    """
 
     # [ P_N, P_IE, P_EI]
     P_outcomes = get_outcome_probabilities(data)
@@ -43,10 +48,15 @@ def information_gain(data, imp):
 
 
 
-# Get the probability of each (nucleotide, outcome) pair
-# returns an array of 12 probabilities:     # [ P_AN, P_AIE, P_AEI, P_TN, ... , P_GN,... P_CN, ...]
-#     where P_AN = totalAN/totalA 
 def get_nucleotide_outcome_probabilities(data):
+    """
+
+    Get the probability of each (nucleotide, outcome) pair
+    returns an array of 12 probabilities:
+    [ P_AN, P_AIE, P_AEI, P_TN, ... , P_GN,... P_CN, ...]
+        where P_AN = totalAN/totalA 
+
+    """
 
     # total A, Total T, total G, total C
     total_nucleotide = np.zeros(4)
@@ -66,11 +76,15 @@ def get_nucleotide_outcome_probabilities(data):
                 prob_nucl_outcomes[index+j] = 0
 
     return prob_nucl_outcomes
-
-# Get the probability of each nucleotide in the data
-#      returns an array [ P_A, P_ T, P_G, P_C ]
-#      where P_A = totalA/total 
+ 
 def get_nucleotide_probabilities(data):
+    """
+
+    Get the probability of each nucleotide in the data
+    returns an array [ P_A, P_ T, P_G, P_C ]
+    where P_A = totalA/total
+
+    """
     total=0
     # total A, Total T, total G, total C
     total_nucleotide = np.zeros(4)
@@ -83,10 +97,14 @@ def get_nucleotide_probabilities(data):
     prob_each_nucleotide = [x/total for x in total_nucleotide]
     return prob_each_nucleotide
 
-# Get the probability of each outcome in the data.
-#      returns an array [P_N, P_IE, P_EI]
-#      where P_N = TotalN/Total, etc.
 def get_outcome_probabilities(data):
+    """
+
+    Get the probability of each outcome in the data.
+    returns an array [P_N, P_IE, P_EI]
+    where P_N = TotalN/Total, etc.
+
+    """
 
     total_each_outcome = np.zeros(3)
     for i in range(0,3):
@@ -98,12 +116,22 @@ def get_outcome_probabilities(data):
     prob_each_outcome = [x / total for x in total_each_outcome]
     return prob_each_outcome
 
+
 def miss_error(data):
+    """
+
+    Compute misclassification error given data set.
+
+    """
     return 1 - max(data)
 
 
-# data: array of probabilities 
 def entropy(data):
+    """
+
+    Compute entropy given a set of data.
+
+    """
     ent = 0
     for p in data:
         if (p != 0):
@@ -111,6 +139,11 @@ def entropy(data):
     return ent
 
 def gini_index(p_outcomes):
+    """
+
+    Compute gini index given p outcomes.
+
+    """
     sum = 0
     for i in range(0, len(p_outcomes)):
         sum += p_outcomes[i]**2
