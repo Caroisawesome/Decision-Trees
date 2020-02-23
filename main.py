@@ -7,7 +7,14 @@ import impurity
 import data
 import sys
 
+
 def classify_data(t, p1, p2):
+    """
+
+    Non recursive function wich takes a decision tree and two parameters. The two parameters
+    are used to name the new output file, and the tree is used to classify a new data set.
+
+    """
     testing = data.read_test_csv('testing.csv')
     dat    = []
     for x in testing:
@@ -15,14 +22,21 @@ def classify_data(t, p1, p2):
     data.write_csv(dat, (str(p1) + str(p2)))
 
 def classify(line, t):
+    """
+
+    Recursive function which takes a line of data, ATCGG..., a decision tree, and recursively
+    scans the tree to classify the new piece of data as EI, IE, or N. Upon finding any of the
+    characters N, D, S, or R, a random value that it corresponds to is then chosen.
+
+    """
     idx = t.label
+    # A, T, G, C are chosen at random for a given value of N, D, S, or R.
     N   = ['A', 'T', 'G', 'C']
     D   = ['A', 'T', 'G']
     S   = ['C', 'G']
     R   = ['A', 'G']
     r   = 0
-    #print(idx)
-    #print(line)
+
     if idx < 0:
         return t.classification
     else:
@@ -46,34 +60,38 @@ def classify(line, t):
         val = new
 
     for c in t.children:
-        #print('attribute ' + c.attr)
         if c.attr == val:
             return classify(line, c)
 
-# Find next optimal position to split
-# calculate if it is worth splitting on that node
-# if yes, then split on that node ( remove that column from the data)
-#         call d_t contstruct on the remaining data
+
 def dt_construct(raw, blacklist, parent, attr, confidence_level, impurity_type):
+    """
+
+    Find next optimal position to split
+    calculate if it is worth splitting on that node
+    if yes, then split on that node ( remove that column from the data)
+    call d_t contstruct on the remaining data
+
+    """
 
     d = data.gen_data(raw, blacklist)
 
+    # Create a new node for the tree.
     node = tree.Tree()
-    #
+    # Get the new position to split for the latest node
     position_to_split = get_root_node(d, blacklist, confidence_level, impurity_type)
     node.children = []
     node.attr = attr
-    #parent.attr = attr
+
     if position_to_split >= 0:
         node.label = position_to_split
-
-
 
         parent.children.append(node)
         blacklist.append(position_to_split)
         raw_segmented_data = split_data(raw, position_to_split)
 
         num_segments = len(raw_segmented_data)
+        # recursively call dt_construct in order to build the tree.
         for i in range(0,num_segments):
             if i == 0:
                 dt_construct(raw_segmented_data[i], blacklist, node, 'A', confidence_level, impurity_type)
@@ -88,9 +106,13 @@ def dt_construct(raw, blacklist, parent, attr, confidence_level, impurity_type):
         node.classification = cl
         parent.children.append(node)
 
-# Determine what the classification should be for the remaining data.
-# Returns the classification that appears the most in the remaining data.
 def get_classification(data):
+    """
+
+    Determine what the classification should be for the remaining data.
+    Returns the classification that appears the most in the remaining data.
+
+    """
     counts = [0,0,0] # N, IE, EI
     vals = ['N', 'IE', 'EI']
     for row in data:
@@ -100,9 +122,14 @@ def get_classification(data):
     return vals[idx]
 
 
-# Splits the raw data from the csv file, into 4 subsets
-# Each row is added to the subset with the matching nucleotide at the given index in the nucleotide string
 def split_data(raw_data, index):
+    """
+
+    Splits the raw data from the csv file, into 4 subsets
+    Each row is added to the subset with the matching nucleotide 
+    at the given index in the nucleotide string
+
+    """
 
     a_dat = []
     t_dat = []
@@ -123,7 +150,13 @@ def split_data(raw_data, index):
 
 
 def chi_square(data, index, confidence_level):
-    #stat, p, dof, expected = chi2_contigency(data)
+    """
+
+    Function for computing the chi squared test over a set of data, takes a set of data,
+    a given index, and a chosen confidence level. Is used to determine when to stop splitting
+    while building the decision tree.
+
+    """
     classes  = 3
     values   = 4
     prob     = 0.99
@@ -138,7 +171,7 @@ def chi_square(data, index, confidence_level):
     else:
         prob = 0
 
-    # totals[0] = n, totals[1] = ie, totals[2] = ei
+    # Compute all the totals for A, T, G, and C respectively.
     totals   =  [d[0] + d[3] + d[6] + d[ 9], d[1] + d[4] + d[7] + d[10], d[2] + d[5] + d[8] + d[11]]
     a_tot    = d[0] + d[ 1] + d[ 2]
     t_tot    = d[3] + d[ 4] + d[ 5]
@@ -146,6 +179,7 @@ def chi_square(data, index, confidence_level):
     c_tot    = d[9] + d[10] + d[11]
     val      = 0
 
+    # Add up total of all values in a given position.
     for i in range(0, len(data[index])):
         total += d[i]
 
@@ -173,9 +207,14 @@ def chi_square(data, index, confidence_level):
     else:
         return False
 
-# returns an integer representing the position
 def get_root_node(counts, blacklist, confidence_level, impurity_type):
-    #print("blacklist", blacklist)
+    """
+ 
+    Takes the set of data as a list of tuples, the blacklist of positions which we are not
+    looking at, a confidence level and the impurity type to look at as an integer.
+    Returns an integer representing the position
+
+    """
     Ig_old = 0
     position = -1
     for i in range(0,60):
@@ -194,6 +233,11 @@ def get_root_node(counts, blacklist, confidence_level, impurity_type):
         return -1
 
 def print_tree(t):
+    """
+
+    Print out our tree as parens, attributes, labels, and classifications.
+
+    """
     print("(" + str(t.attr) + str(t.label) + str(t.classification), end='')
     for i in t.children:
         print_tree(i)
