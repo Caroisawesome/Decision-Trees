@@ -1,6 +1,6 @@
 # Decision-Trees-ML
 
-This Decision-Tree-ML repo implements a ID3 decision tree algorithm that was trained using the data from `training.csv`. 
+This Decision-Tree-ML repo implements a ID3 decision tree algorithm which we use to classify introns, exons, and the lack of introns and exons in a sequence of 60 nucleotides. The decision tree is trained using the data from `training.csv`, and tested using `testing.csv`. A paper discussing implementation and results can be viewed at `Desition_Trees.pdf` in this project repository.
 
 ## To run the program:
 
